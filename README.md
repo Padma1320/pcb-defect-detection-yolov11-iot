@@ -93,8 +93,7 @@ Inference outputs from the YOLOv11 models are processed via a deterministic cont
 
 ```text
 If class == "Missing Hole" → Output: "Check CNC Drill Bit"
-If class == "Solder Bridge" → Output: "Apply Flux & Reflow"
-
+If class == "Solder Bridge" → Output: "Apply Flux & Reflow" 
 ### 4. Engineered for the Factory Floor
 
 This system is optimized for real-world deployment:
