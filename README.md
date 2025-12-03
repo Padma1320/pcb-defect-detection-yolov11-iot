@@ -1,59 +1,73 @@
-# pcb-defect-detection-yolov11-iot
-Dual-stage PCB defect detection (Fabrication + Assembly) using YOLOv11, ONNX, and Azure IoT Telemetry.
+## Project Highlights: An Industry-Ready Smart Inspection System
 
-Project Highlights: An Industry-Ready Smart Inspection System
 This is not just an object detection model—it is a complete industrial automation solution designed to solve real manufacturing challenges with speed, precision, and scalability.
 
-1. Solves a Core Industrial Problem
-Traditional PCB inspection is slow, expensive, and often inaccurate. This system provides a software-defined, adaptable alternative that:
+---
+### 1. Solves a Core Industrial Problem
 
-Reduces reliance on costly AOI hardware.
+Traditional PCB inspection is slow, expensive, and often inaccurate.  
+This system provides a software-defined, adaptable alternative that:
 
-Increases throughput with real-time inference.
+- Reduces reliance on costly AOI hardware  
+- Increases throughput with real-time inference  
+- Improves consistency by eliminating operator fatigue  
+- Adapts instantly to new defect types without expensive retooling  
 
-Improves consistency by eliminating operator fatigue.
+---
+### 2. Strategic Dual-Model Architecture
 
-Adapts instantly to new defect types without expensive retooling.
+Instead of forcing every defect through a single model, the inspection pipeline mirrors an actual SMT production line.
+#### **Model A (Fabrication) — The Yield Guardian**
 
-2. Strategic Dual-Model Architecture
-Instead of forcing every defect through a single model, the inspection pipeline mirrors an actual SMT production line:
+- Inspects raw bare boards immediately after etching  
+- Precision: **94.88%**  
+- Prevents unnecessary scrapping of good boards, reducing material loss  
 
-Model A (Fabrication) — The Yield Guardian
+#### **Model B (Assembly) — The Risk Mitigator**
 
-Inspects raw bare boards immediately after etching.
+- Inspects populated boards after reflow soldering  
+- Recall: **91.33%**  
+- Ensures zero "defect escapes" reach the customer  
 
-Precision: 94.88%
+This dual-stream approach significantly improves reliability over monolithic single-model systems.
 
-Impact: Prevents unnecessary scrapping of good boards, reducing raw material loss.
+---
+### 3. Full Edge-to-Cloud Integration (Digital Twin Architecture)
 
-Model B (Assembly) — The Risk Mitigator
+This project extends beyond visual detection to build a complete smart manufacturing data loop.
+#### **Edge Intelligence (Action Mapping)**
 
-Inspects populated boards after reflow.
+Every detection triggers a specific business rule.
 
-Recall: 91.33%
+Example:  
+- Defect: *Missing Hole*  
+- Action: *Inspect CNC Drill Bit*
+#### **Cloud Telemetry (Azure IoT Hub)**
 
-Impact: Ensures no defect escapes reach the customer, protecting brand reputation.
+Inspection data is serialized into JSON and pushed via MQTT, enabling:
 
-This dual-stream architecture provides significantly higher reliability than a monolithic single-model system.
+- Predictive maintenance  
+- Historical quality tracking  
+- Remote factory monitoring  
 
-3. Full Edge-to-Cloud Integration (Digital Twin)
-The project goes beyond visual detection and builds a complete smart manufacturing data loop.
+---
+### 4. Engineered for the Factory Floor
 
-Edge Intelligence (Action Mapping)
+This system is optimized for real-world deployment:
 
-Each detection is converted into a corrective instruction.
+- **78.5 FPS** throughput for high-speed conveyor environments  
+- ONNX-exported models for low-latency edge inference  
+- Works on Jetson devices, Raspberry Pi, and lightweight edge hardware  
 
-Example: “Missing Hole” → “Inspect CNC Drill Bit”
+---
+### Why This Matters
 
-Cloud Telemetry (Digital Twin)
+This project demonstrates a holistic engineering skillset combining:
 
-All inspection data is serialized into JSON and pushed to Microsoft Azure IoT Hub via MQTT.
+- Deep Learning (YOLOv11, Custom Training)  
+- Smart Instrumentation (Sensor Integration)  
+- Control Systems (Feedback Logic)  
+- Industrial IoT (Azure, MQTT, Telemetry)  
+- Edge Computing (ONNX Optimization)  
 
-Enables: Predictive maintenance, historical quality tracking, and remote factory monitoring.
-
-4. Engineered for the Factory Floor
-This system is designed for deployment—not just academic performance.
-
-High Throughput: 78.5 FPS, compatible with high-speed conveyor lines.
-
-Edge-Ready: ONNX-exported models enable low-latency inference on devices such as NVIDIA Jetson.
+The result is a practical, scalable, and industry-grade inspection system ready for modern manufacturing environments.
