@@ -94,3 +94,25 @@ Inference outputs from the YOLOv11 models are processed via a deterministic cont
 ```text
 If class == "Missing Hole" → Output: "Check CNC Drill Bit"
 If class == "Solder Bridge" → Output: "Apply Flux & Reflow"
+
+### 4. Engineered for the Factory Floor
+
+This system is optimized for real-world deployment:
+
+- **78.5 FPS** throughput suitable for high-speed conveyors  
+- ONNX-exported models enabling low-latency inference on edge devices  
+- Works on Jetson boards, Raspberry Pi, and other lightweight edge hardware  
+
+---
+
+### Why This Matters
+
+This project demonstrates a holistic engineering skillset combining:
+
+- Deep Learning (YOLOv11, custom training)  
+- Smart Instrumentation (sensor-based inspection)  
+- Control Systems (feedback and corrective logic)  
+- Industrial IoT (Azure, MQTT, real-time telemetry)  
+- Edge Computing (ONNX optimization for deployment)  
+
+The result is a practical, scalable, and industry-grade inspection system ready for modern manufacturing environments.
