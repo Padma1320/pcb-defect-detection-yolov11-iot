@@ -39,6 +39,11 @@ This project extends beyond visual detection to build a complete smart manufactu
 
 Every detection triggers a specific business rule.
 
+## System Architecture
+
+![System Architecture](system_architecture.png)
+
+
 Example:  
 - Defect: *Missing Hole*  
 - Action: *Inspect CNC Drill Bit*
