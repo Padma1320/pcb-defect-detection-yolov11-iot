@@ -173,7 +173,7 @@ This showed that conversion to ONNX does not automatically guarantee faster infe
 
 ---
 
-## Technologies Used
+## Skillset
 
 ### Computer Vision & Machine Learning
 
@@ -260,13 +260,7 @@ ONNX benchmarking also demonstrated that deployment optimization is model-depend
 
 ---
 
-## Technical Report
 
-A detailed technical report covering the system architecture, dataset, model development, evaluation, IoT integration and experimental results is available with the project.
-
-**[View Technical Report](REPORT_LINK_HERE)**
-
----
 
 ## Project Context
 
