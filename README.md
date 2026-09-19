@@ -1,22 +1,32 @@
-# pcb-defect-detection-yolov11-iot
+# Dual-Stage PCB Defect Detection using YOLOv11 & IoT
 
-Dual-stage PCB defect detection (Fabrication + Assembly) using YOLOv11, ONNX, and Azure IoT Telemetry.
+**Faculty-Guided Project · National Institute of Technology, Tiruchirappalli**
+
+A computer-vision-based inspection system for detecting defects across two stages of PCB manufacturing: **bare-board fabrication** and **populated-board assembly**.
+
+The project uses separate YOLOv11 models for the two inspection stages, followed by defect-to-corrective-action mapping and IoT-based telemetry for communicating inspection results.
 
 ---
 
-## Project Highlights: An Industry-Ready Smart Inspection System
+## Overview
 
-This is not just an object detection model—it is a complete industrial automation solution designed to solve real manufacturing challenges with speed, precision, and scalability.
+PCB inspection involves different types of defects depending on the stage of manufacturing.
 
-### 1. Solves a Core Industrial Problem
+Instead of treating PCB inspection as a single detection problem, this project separates it into two stages:
 
-Traditional PCB inspection is slow, expensive, and often inaccurate.  
-This system provides a software-defined, adaptable alternative that:
+### Stage 1 — Fabrication Inspection
 
-- Reduces reliance on costly AOI hardware  
-- Increases throughput with real-time inference  
-- Improves consistency by eliminating operator fatigue  
-- Adapts instantly to new defect types without expensive retooling  
+Inspection of **bare PCBs** for fabrication-related defects.
+
+The fabrication model was designed with an emphasis on **precision**, helping reduce unnecessary rejection of boards caused by false-positive detections.
+
+### Stage 2 — Assembly Inspection
+
+Inspection of **populated PCBs** after component placement and soldering.
+
+The assembly model places greater emphasis on **recall**, since missing a potentially important assembly defect can be more significant than generating an additional inspection alert.
+
+Together, the two models form a dual-stage PCB inspection pipeline.
 
 ---
 
@@ -24,96 +34,252 @@ This system provides a software-defined, adaptable alternative that:
 
 ![System Architecture](system_architecture.png)
 
----
+The overall workflow is:
 
-## 2. Strategic Dual-Model Architecture
+**PCB Image → Inspection Stage → YOLOv11 Detection → Defect Classification → Corrective-Action Mapping → IoT Telemetry**
 
-The inspection pipeline is intentionally decoupled into two specialized stages to address the fundamentally different requirements of PCB fabrication and PCB assembly.  
-This avoids the accuracy trade-offs and instability that occur in monolithic single-model systems.
-
-### 2.1 Model A — Fabrication Stage (High-Precision Configuration)
-
-**Role:** Inspects raw bare boards immediately after the etching process  
-**Key Metric:** 94.88% precision  
-
-**Technical Objectives:**
-
-- Minimize false positives  
-- Prevent rejection of functional boards  
-- Maximize material yield  
-
-Precision is prioritized because fabrication defects are relatively sparse but critical; over-flagging good boards directly increases scrap cost and disrupts production.
+The two inspection stages operate using independently trained models so that their behaviour can be evaluated and optimized separately.
 
 ---
 
-### 2.2 Model B — Assembly Stage (High-Recall Configuration)
+## Dataset
 
-**Role:** Inspects component-mounted PCBs after reflow soldering  
-**Key Metric:** 91.33% recall  
+The combined dataset contains:
 
-**Technical Objectives:**
+| Parameter | Value |
+|---|---:|
+| Total Images | **1,698** |
+| Fabrication Images | **741** |
+| Assembly Images | **957** |
+| Total Defect Classes | **10** |
 
-- Minimize false negatives  
-- Ensure no defective boards escape to customers  
-- Maximize final product reliability  
-
-Recall is prioritized because missing a solder or placement defect can cause field failures, returns, and warranty costs.
-
----
-
-### 2.3 Why a Dual-Model Approach?
-
-- Fabrication and assembly stages have different visual patterns, defect distributions, and business risk profiles.  
-- A single model tuned for one stage will typically underperform on the other.  
-- Using two specialized models allows independent optimization of decision thresholds:  
-  - Model A is tuned for **strict precision**.  
-  - Model B is tuned for **strict recall**.  
-- This architecture mirrors real SMT production lines and makes the system closer to an industry-ready AOI replacement rather than an academic demo.
+The dataset was divided between fabrication and assembly inspection tasks according to the corresponding defect type.
 
 ---
 
-## 3. Full Edge-to-Cloud Integration (Digital Twin Architecture)
+## Model Development
 
-The system extends beyond local inference to establish a closed-loop data pipeline from edge devices to the cloud, enabling a production-line Digital Twin.
+Two YOLOv11 models were developed.
 
-### 3.1 Edge Logic and Action Mapping
+### Model A — Fabrication Defect Detection
 
-Inference outputs from the YOLOv11 models are processed via a deterministic control script:
+**Architecture:** YOLOv11s
 
-- Raw class labels are mapped to specific maintenance or inspection instructions.  
-- The system produces **operational recommendations**, not just bounding boxes.
+The fabrication model was selected with an emphasis on precision.
 
-**Example mapping logic:**
+**Precision: 94.88%**
 
-If class == "Missing Hole" → Output: "Check CNC Drill Bit"
-If class == "Solder Bridge" → Output: "Apply Flux & Reflow"
+This helps reduce false-positive detections during bare-PCB inspection.
 
-text
+### Model B — Assembly Defect Detection
 
-### 3.2 Cloud Telemetry
+**Architecture:** YOLOv11n
 
-- Inspection metadata (class ID, confidence score, timestamp, mapped action) is serialized into JSON.  
-- Messages are pushed to Microsoft Azure IoT Hub over MQTT, creating a continuous telemetry stream suitable for dashboards, alerts, and analytics.
+The assembly model was evaluated with greater emphasis on recall.
 
----
+**Recall: 91.33%**
 
-## 4. Engineered for the Factory Floor
-
-This system is optimized for real-world deployment, not just offline benchmarks.
-
-- **Throughput:** 78.5 FPS, compatible with high-speed conveyor lines.  
-- **Deployment:** Models exported to ONNX for low-latency inference on edge devices such as NVIDIA Jetson and other lightweight industrial PCs.  
+This helps reduce the likelihood of assembly defects being missed during inspection.
 
 ---
 
-## Why This Matters
+## Overall Performance
 
-This project demonstrates a holistic engineering skillset combining:
+Across the complete dual-stage system:
 
-- Deep Learning (YOLOv11, custom training)  
-- Smart Instrumentation (camera-based inspection design)  
-- Control Systems (feedback and corrective logic)  
-- Industrial IoT (Azure, MQTT, real-time telemetry)  
-- Edge Computing (ONNX optimization for deployment)  
+| Metric | Result |
+|---|---:|
+| mAP@0.5 | **91.12%** |
+| Precision | **91.36%** |
+| Recall | **90.53%** |
+| Inference Throughput | **78.5 FPS** |
+| Defect Classes | **10** |
 
-The result is a practical, scalable, industry-grade inspection system ready for modern manufacturing environments.
+These results were obtained during evaluation of the project datasets and models.
+
+---
+
+## Detection Results
+
+The trained models detect and localize PCB defects using bounding boxes and class predictions.
+
+Representative outputs from the fabrication and assembly models are available in the [`results`](results/) directory.
+
+The two-stage design allows fabrication and assembly defects to be evaluated independently rather than forcing both inspection tasks into a single model.
+
+---
+
+## IoT Telemetry & Corrective-Action Mapping
+
+The vision pipeline was extended beyond defect detection to structure the model outputs for IoT-based reporting.
+
+Detected defect classes are mapped to corresponding corrective or inspection actions.
+
+For example:
+
+```text
+Detected Defect
+        ↓
+Defect Classification
+        ↓
+Corrective-Action Mapping
+        ↓
+Structured JSON Payload
+        ↓
+MQTT / Azure IoT Hub
+```
+
+The telemetry pipeline is implemented in:
+
+```text
+iot_telemetry_pipeline.py
+```
+
+This enables model predictions to be converted into structured information that can be communicated to an IoT platform.
+
+---
+
+## Example Telemetry Structure
+
+A detection can be represented using structured data containing information such as:
+
+```json
+{
+  "inspection_stage": "assembly",
+  "defect": "solder_bridge",
+  "confidence": 0.94,
+  "corrective_action": "inspect solder joints and remove excess solder"
+}
+```
+
+The exact output depends on the detected defect and the corresponding corrective-action mapping.
+
+---
+
+## ONNX Deployment Evaluation
+
+The trained models were also evaluated after conversion to **ONNX** to investigate deployment-oriented inference performance.
+
+For Model A, inference time improved from approximately:
+
+**15.4 ms → 8.2 ms**
+
+However, the same improvement was not observed for Model B:
+
+**PyTorch: 31.11 ms**  
+**ONNX: 37.76 ms**
+
+This showed that conversion to ONNX does not automatically guarantee faster inference for every model and that deployment performance should be benchmarked separately for each architecture and target environment.
+
+---
+
+## Technologies Used
+
+### Computer Vision & Machine Learning
+
+- YOLOv11
+- PyTorch
+- OpenCV
+- ONNX
+- Object Detection
+- Model Training & Evaluation
+
+### IoT
+
+- Azure IoT Device SDK
+- Azure IoT Hub
+- MQTT
+- JSON Telemetry
+- Defect-to-Corrective-Action Mapping
+
+### Programming & Development
+
+- Python
+- Jupyter Notebook
+- Git / GitHub
+
+### Engineering
+
+- PCB Defect Inspection
+- Fabrication Defect Detection
+- Assembly Defect Detection
+- Edge-to-Cloud Telemetry
+- Deployment-Oriented Model Evaluation
+
+---
+
+## Repository Structure
+
+```text
+pcb-defect-detection-yolov11-iot/
+│
+├── models/
+│   └── Trained / exported model files
+│
+├── notebooks/
+│   └── Model development and evaluation notebooks
+│
+├── results/
+│   └── Detection and evaluation outputs
+│
+├── iot_telemetry_pipeline.py
+│   └── Defect telemetry and corrective-action mapping
+│
+├── system_architecture.png
+│   └── Overall system architecture
+│
+└── README.md
+```
+
+---
+
+## Key Engineering Takeaways
+
+This project provided experience across the complete development pipeline:
+
+- Framing one manufacturing problem as two separate computer-vision tasks
+- Preparing datasets for object detection
+- Training and evaluating YOLOv11 models
+- Comparing precision and recall requirements for different inspection stages
+- Evaluating model inference performance
+- Converting models to ONNX
+- Benchmarking deployment performance
+- Structuring model predictions for IoT communication
+- Mapping detected defects to corrective actions
+- Integrating computer vision with an IoT telemetry pipeline
+
+---
+
+## Limitations
+
+The system was developed and evaluated using the project datasets and experimental setup.
+
+Further validation would be required before deployment in a production PCB manufacturing environment, particularly across different cameras, lighting conditions, PCB designs and target compute hardware.
+
+ONNX benchmarking also demonstrated that deployment optimization is model-dependent: Model A benefited from ONNX conversion, while Model B did not show the same inference-speed improvement.
+
+---
+
+## Technical Report
+
+A detailed technical report covering the system architecture, dataset, model development, evaluation, IoT integration and experimental results is available with the project.
+
+**[View Technical Report](REPORT_LINK_HERE)**
+
+---
+
+## Project Context
+
+This project was carried out as a **faculty-guided project at the National Institute of Technology, Tiruchirappalli (NIT Trichy)**.
+
+It was developed outside regular coursework as an exploration of computer vision and IoT-based automated inspection.
+
+---
+
+## Author
+
+**Padma Muthu Lakshmanan**  
+B.Tech — Instrumentation & Control Engineering  
+National Institute of Technology, Tiruchirappalli
+
+[GitHub](https://github.com/Padma1320)
