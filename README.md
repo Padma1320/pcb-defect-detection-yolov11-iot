@@ -250,16 +250,6 @@ This project provided experience across the complete development pipeline:
 
 ---
 
-## Limitations
-
-The system was developed and evaluated using the project datasets and experimental setup.
-
-Further validation would be required before deployment in a production PCB manufacturing environment, particularly across different cameras, lighting conditions, PCB designs and target compute hardware.
-
-ONNX benchmarking also demonstrated that deployment optimization is model-dependent: Model A benefited from ONNX conversion, while Model B did not show the same inference-speed improvement.
-
----
-
 
 
 ## Project Context
